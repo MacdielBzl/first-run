@@ -21,11 +21,29 @@ FILEBROWSER_SERVICE_GROUP="${FILEBROWSER_SERVICE_GROUP:-${FILEBROWSER_SERVICE_US
 
 # Filebrowser app users to create inside filebrowser's DB (not system users)
 REQUIRED_USER="pi"
+if [[ -t 0 && -z "${FILEBROWSER_USER_PASSWORD:-}" ]]; then
+  read -rp "Usuario estandar de filebrowser [${REQUIRED_USER}]: " usr_inp
+  REQUIRED_USER="${usr_inp:-$REQUIRED_USER}"
+fi
 REQUIRED_PASSWORD="${FILEBROWSER_USER_PASSWORD:-}"
+if [[ -t 0 && -z "${REQUIRED_PASSWORD}" ]]; then
+  read -rsp "Contrasena para ${REQUIRED_USER} (en blanco para autogenerar): " pwd_inp
+  echo
+  if [[ -n "${pwd_inp}" ]]; then REQUIRED_PASSWORD="${pwd_inp}"; fi
+fi
 
 # Administrative user inside filebrowser
 FB_ADMIN_USER="root"
+if [[ -t 0 && -z "${FILEBROWSER_ADMIN_PASSWORD:-}" ]]; then
+  read -rp "Usuario admin de filebrowser [${FB_ADMIN_USER}]: " usr_adm
+  FB_ADMIN_USER="${usr_adm:-$FB_ADMIN_USER}"
+fi
 FB_ADMIN_PASSWORD="${FILEBROWSER_ADMIN_PASSWORD:-}"
+if [[ -t 0 && -z "${FB_ADMIN_PASSWORD}" ]]; then
+  read -rsp "Contrasena admin para filebrowser (en blanco para autogenerar): " pwd_adm
+  echo
+  if [[ -n "${pwd_adm}" ]]; then FB_ADMIN_PASSWORD="${pwd_adm}"; fi
+fi
 
 if [[ $(id -u) -ne 0 ]]; then
   echo "Este script debe ejecutarse con privilegios de administrador (sudo)." >&2

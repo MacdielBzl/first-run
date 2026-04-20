@@ -10,7 +10,16 @@ TTYD_BASE_PATH="${TTYD_BASE_PATH:-/ttyd}"
 SERVICE_NAME="ttyd.service"
 LOG_PATH="/var/log/ttyd.log"
 AUTH_USER="${TTYD_AUTH_USER:-pi}"
+if [[ -t 0 && -z "${TTYD_AUTH_USER:-}" ]]; then
+  read -rp "Usuario para acceso web ttyd [${AUTH_USER}]: " ttyd_usr
+  AUTH_USER="${ttyd_usr:-$AUTH_USER}"
+fi
 AUTH_PASSWORD="${TTYD_AUTH_PASSWORD:-}"
+if [[ -t 0 && -z "${AUTH_PASSWORD}" ]]; then
+  read -rsp "Contrasena para acceso web ttyd (en blanco sin clave): " ttyd_pwd
+  echo
+  if [[ -n "${ttyd_pwd}" ]]; then AUTH_PASSWORD="${ttyd_pwd}"; fi
+fi
 
 if [[ $(id -u) -ne 0 ]]; then
   echo "Este script debe ejecutarse con privilegios de administrador (sudo)." >&2

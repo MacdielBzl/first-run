@@ -217,8 +217,21 @@ function install_mariadb() {
   log "Installing MariaDB server and client"
   # Configurables: usuario, contraseña, bases (coma-separadas) y SQL inicial opcional
   : "${MARIA_DB_USER:=appuser}"
+  if [[ -t 0 ]]; then
+    read -rp "Usuario para originar base de datos MariaDB [${MARIA_DB_USER}]: " mariadb_usr
+    MARIA_DB_USER="${mariadb_usr:-$MARIA_DB_USER}"
+  fi
   : "${MARIA_DB_PASS:=}"
+  if [[ -t 0 && -z "${MARIA_DB_PASS}" ]]; then
+    read -rsp "Contrasena para base de datos MariaDB para el usuario ${MARIA_DB_USER} (en blanco para dejar vacio): " mariadb_pwd
+    echo
+    if [[ -n "${mariadb_pwd}" ]]; then MARIA_DB_PASS="${mariadb_pwd}"; fi
+  fi
   : "${MARIA_DB_NAMES:=appdb}"
+  if [[ -t 0 && "${MARIA_DB_NAMES}" == "appdb" ]]; then
+    read -rp "Nombre de la base de datos MariaDB (separado por comas) [${MARIA_DB_NAMES}]: " mariadb_dbs
+    MARIA_DB_NAMES="${mariadb_dbs:-$MARIA_DB_NAMES}"
+  fi
   : "${MARIA_DB_INIT_SQL:=}"
 
   if [[ ${DRY_RUN} -eq 1 ]]; then
