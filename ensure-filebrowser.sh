@@ -135,7 +135,7 @@ function gen_password() {
 
 # Ensure passwords meet minimum length; if not, generate new ones and save
 function ensure_passwords() {
-  local minlen=12
+  local minlen=1
   local changed=0
 
   if [[ -z "${REQUIRED_PASSWORD}" || ${#REQUIRED_PASSWORD} -lt ${minlen} ]]; then
@@ -156,8 +156,8 @@ function ensure_passwords() {
     local tmpf
     tmpf=$(mktemp)
     printf '%s\n' "# filebrowser credentials generated on $(date -u '+%Y-%m-%d %H:%M:%SZ')" >"${tmpf}"
-    printf 'pi:%s\n' "${REQUIRED_PASSWORD}" >>"${tmpf}"
-    printf 'root:%s\n' "${FB_ADMIN_PASSWORD}" >>"${tmpf}"
+    printf '%s:%s\n' "${REQUIRED_USER}" "${REQUIRED_PASSWORD}" >>"${tmpf}"
+    printf '%s:%s\n' "${FB_ADMIN_USER}" "${FB_ADMIN_PASSWORD}" >>"${tmpf}"
     mv "${tmpf}" "${CREDFILE}" && chmod 600 "${CREDFILE}" || true
     echo "Se generaron/actualizaron contraseñas y se guardaron en: ${CREDFILE} (perm: 600)"
   fi
