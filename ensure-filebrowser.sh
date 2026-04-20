@@ -27,9 +27,13 @@ if [[ -t 0 && -z "${FILEBROWSER_USER_PASSWORD:-}" ]]; then
 fi
 REQUIRED_PASSWORD="${FILEBROWSER_USER_PASSWORD:-}"
 if [[ -t 0 && -z "${REQUIRED_PASSWORD}" ]]; then
-  read -rsp "Contrasena para ${REQUIRED_USER} (en blanco para autogenerar): " pwd_inp
-  echo
-  if [[ -n "${pwd_inp}" ]]; then REQUIRED_PASSWORD="${pwd_inp}"; fi
+  while true; do
+    read -rsp "Contrasena para ${REQUIRED_USER} (min 12 char, blanco p/ auto): " pwd_inp
+    echo
+    if [[ -z "${pwd_inp}" ]]; then break; fi
+    if (( ${#pwd_inp} >= 12 )); then REQUIRED_PASSWORD="${pwd_inp}"; break; fi
+    echo "Error: La contrasena debe tener al menos 12 caracteres. Intenta de nuevo."
+  done
 fi
 
 # Administrative user inside filebrowser
@@ -40,9 +44,13 @@ if [[ -t 0 && -z "${FILEBROWSER_ADMIN_PASSWORD:-}" ]]; then
 fi
 FB_ADMIN_PASSWORD="${FILEBROWSER_ADMIN_PASSWORD:-}"
 if [[ -t 0 && -z "${FB_ADMIN_PASSWORD}" ]]; then
-  read -rsp "Contrasena admin para filebrowser (en blanco para autogenerar): " pwd_adm
-  echo
-  if [[ -n "${pwd_adm}" ]]; then FB_ADMIN_PASSWORD="${pwd_adm}"; fi
+  while true; do
+    read -rsp "Contrasena admin para filebrowser (min 12 char, blanco p/ auto): " pwd_adm
+    echo
+    if [[ -z "${pwd_adm}" ]]; then break; fi
+    if (( ${#pwd_adm} >= 12 )); then FB_ADMIN_PASSWORD="${pwd_adm}"; break; fi
+    echo "Error: La contrasena debe tener al menos 12 caracteres. Intenta de nuevo."
+  done
 fi
 
 if [[ $(id -u) -ne 0 ]]; then
@@ -135,7 +143,7 @@ function gen_password() {
 
 # Ensure passwords meet minimum length; if not, generate new ones and save
 function ensure_passwords() {
-  local minlen=1
+  local minlen=12
   local changed=0
 
   if [[ -z "${REQUIRED_PASSWORD}" || ${#REQUIRED_PASSWORD} -lt ${minlen} ]]; then
