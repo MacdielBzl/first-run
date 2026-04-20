@@ -333,12 +333,10 @@ function configure_filebrowser() {
     filebrowser users update "${REQUIRED_USER}" \
       --database "${DB_FILE}" \
       --password "${REQUIRED_PASSWORD}" \
-      --perm.readonly=false \
       --scope "${FILEBROWSER_SCOPE}" || true
   else
     filebrowser users add "${REQUIRED_USER}" "${REQUIRED_PASSWORD}" \
       --database "${DB_FILE}" \
-      --perm.readonly=false \
       --scope "${FILEBROWSER_SCOPE}" || true
   fi
 
