@@ -74,9 +74,8 @@ if [[ -z "${TTYD_BIN}" ]]; then
   exit 1
 fi
 
-if [[ -z "${AUTH_USER}" || -z "${AUTH_PASSWORD}" ]]; then
-  echo "Las credenciales de ttyd no pueden estar vacías. Usa TTYD_AUTH_USER y TTYD_AUTH_PASSWORD para definirlas." >&2
-  exit 1
+if [[ -z "${AUTH_USER}" ]]; then
+  AUTH_USER="pi"
 fi
 
 if [[ "${AUTH_USER}" == *":"* ]]; then
@@ -101,8 +100,12 @@ if (( REQUIRED_PORT < 1 || REQUIRED_PORT > 65535 )); then
   exit 1
 fi
 
-local tmp_service
 tmp_service=$(mktemp)
+CRED_ARGS=""
+if [[ -n "${AUTH_PASSWORD}" ]]; then
+  CRED_ARGS="--credential ${AUTH_USER}:${AUTH_PASSWORD}"
+fi
+
 cat > "${tmp_service}" <<EOF
 [Unit]
 Description=ttyd Web Terminal
@@ -114,7 +117,7 @@ Type=simple
 User=${INVOKER_USER}
 WorkingDirectory=${USER_HOME}
 Environment=HOME=${USER_HOME}
-ExecStart=${TTYD_BIN} --writable --interface 127.0.0.1 --port ${REQUIRED_PORT} --base-path ${TTYD_BASE_PATH} --credential ${AUTH_USER}:${AUTH_PASSWORD} bash
+ExecStart=${TTYD_BIN} --writable --interface 127.0.0.1 --port ${REQUIRED_PORT} --base-path ${TTYD_BASE_PATH} ${CRED_ARGS} bash
 Restart=on-failure
 RestartSec=5
 StandardOutput=append:${LOG_PATH}
