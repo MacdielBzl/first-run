@@ -10,7 +10,7 @@ TTYD_BASE_PATH="${TTYD_BASE_PATH:-/ttyd}"
 SERVICE_NAME="ttyd.service"
 LOG_PATH="/var/log/ttyd.log"
 AUTH_USER="${TTYD_AUTH_USER:-pi}"
-AUTH_PASSWORD="${TTYD_AUTH_PASSWORD:-esmberry}"
+AUTH_PASSWORD="${TTYD_AUTH_PASSWORD:-}"
 
 if [[ $(id -u) -ne 0 ]]; then
   echo "Este script debe ejecutarse con privilegios de administrador (sudo)." >&2

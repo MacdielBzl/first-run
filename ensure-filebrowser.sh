@@ -21,11 +21,11 @@ FILEBROWSER_SERVICE_GROUP="${FILEBROWSER_SERVICE_GROUP:-${FILEBROWSER_SERVICE_US
 
 # Filebrowser app users to create inside filebrowser's DB (not system users)
 REQUIRED_USER="pi"
-REQUIRED_PASSWORD="esmraspberry"
+REQUIRED_PASSWORD="${FILEBROWSER_USER_PASSWORD:-}"
 
 # Administrative user inside filebrowser
 FB_ADMIN_USER="root"
-FB_ADMIN_PASSWORD="esmrootberry"
+FB_ADMIN_PASSWORD="${FILEBROWSER_ADMIN_PASSWORD:-}"
 
 if [[ $(id -u) -ne 0 ]]; then
   echo "Este script debe ejecutarse con privilegios de administrador (sudo)." >&2

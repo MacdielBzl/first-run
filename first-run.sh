@@ -217,7 +217,7 @@ function install_mariadb() {
   log "Installing MariaDB server and client"
   # Configurables: usuario, contraseña, bases (coma-separadas) y SQL inicial opcional
   : "${MARIA_DB_USER:=appuser}"
-  : "${MARIA_DB_PASS:=apppass}"
+  : "${MARIA_DB_PASS:=}"
   : "${MARIA_DB_NAMES:=appdb}"
   : "${MARIA_DB_INIT_SQL:=}"
 

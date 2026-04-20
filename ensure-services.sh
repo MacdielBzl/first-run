@@ -168,7 +168,7 @@ function infer_ttyd_credentials() {
 
 	if [[ -z "${TTYD_AUTH_USER}" || -z "${TTYD_AUTH_PASSWORD}" ]]; then
 		TTYD_AUTH_USER="${TTYD_AUTH_USER:-pi}"
-		TTYD_AUTH_PASSWORD="${TTYD_AUTH_PASSWORD:-esmberry}"
+		TTYD_AUTH_PASSWORD="${TTYD_AUTH_PASSWORD:-}"
 		if [[ -z "${TTYD_AUTH_SOURCE}" ]]; then
 			TTYD_AUTH_SOURCE="defaults"
 		fi
