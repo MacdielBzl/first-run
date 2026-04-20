@@ -120,15 +120,16 @@ function apt_update_upgrade_clean() {
 }
 
 function install_packages_system() {
-  local pkgs=(curl wget git ca-certificates)
+  local pkgs=(curl wget git ca-certificates nmap)
   if [[ "${PKG_MANAGER}" == "apt" ]]; then
-    pkgs+=(build-essential)
+    pkgs+=(build-essential dnsutils)
     if [[ ${DRY_RUN} -eq 1 ]]; then
       log "[dry-run] apt-get install -y ${pkgs[*]}"
     else
       apt-get install -y "${pkgs[@]}"
     fi
   elif [[ "${PKG_MANAGER}" == "dnf" ]]; then
+    pkgs+=(bind-utils)
     if [[ ${DRY_RUN} -eq 1 ]]; then
       log "[dry-run] dnf install -y ${pkgs[*]}"
     else
